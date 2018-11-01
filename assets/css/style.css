@@ -1,0 +1,22 @@
+h1, h3 {
+    text-align:center;
+    color:white;
+}
+
+#titleArea {
+    height:200px;
+    padding:56px 0px 56px 0px;
+    background-color:black;
+}
+
+body {
+    background-image:url("https://orig00.deviantart.net/e04a/f/2014/027/b/1/evil_thomas_2_by_claudeanthony-d73xvvd.jpg");
+}
+
+.card {
+    background-color:RGBA(255,255,255,.8);
+}
+
+.card-header {
+    background-color:RGBA(255,0,0,.8);
+}
