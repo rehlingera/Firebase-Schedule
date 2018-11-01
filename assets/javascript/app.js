@@ -16,20 +16,32 @@ var destination = "";
 var firstTrainTime = "";
 var frequency = "";
 
-console.log(moment().format('MM/DD/YY, hh:mm a'));
-
 database.ref().on("child_added", function(childSnapshot) {
-    console.log("name: "+childSnapshot.val().name);
-    console.log("destination: "+childSnapshot.val().destination);
-    console.log("firstTrainTime: "+childSnapshot.val().firstTrainTime);
-    console.log("frequency: "+childSnapshot.val().frequency);
-
-    // var unformattedNextTrain = ;
-    // var nextTrain = ;
-    // var unformattedMinutesAway = ;
-    // var minutesAway = ;
 
     // Calculate the CURRENT TIME - THE START TIME. Divide the difference by the FREQUENCY and get the remainder. Subtract the REMAINDER from the FREQUENCY. That is how much time will elapse before the next train comes.
+
+    var currentTime = moment();
+    console.log("current time: " + moment(currentTime).format('HH:mm'));
+
+    var startTimeConverted = moment(childSnapshot.val().firstTrainTime,'HH:mm').subtract(24,'hours');
+    console.log("train start time: " + moment(startTimeConverted).format('HH:mm'));
+
+    var frequencyMin = childSnapshot.val().frequency;
+    console.log("frequency: " + frequencyMin);
+
+    var difference = moment().diff(moment(startTimeConverted),"minutes")
+    console.log("difference in mins: " + difference);
+
+    var remainder = difference%frequencyMin;
+    console.log("remainder: " + remainder);
+
+    var minutesRemaining = frequencyMin-remainder;
+    console.log("minutes until next train: " + minutesRemaining);
+
+    var nextTrain = moment(moment().add(minutesRemaining, 'minutes')).format('HH:mm');
+    console.log(nextTrain);
+
+    console.log("------------")
 
     name = childSnapshot.val().name;
     destination = childSnapshot.val().destination;
@@ -38,7 +50,7 @@ database.ref().on("child_added", function(childSnapshot) {
 
     var newRow = $("<tr>")
       
-    newRow.html("<td>"+name+"</td><td>"+destination+"</td><td>"+firstTrainTime+"</td><td></td><td>"+frequency+"</td><td></td>");
+    newRow.html("<td>"+name+"</td><td>"+destination+"</td><td>"+frequency+"</td><td>"+nextTrain+"</td><td>"+minutesRemaining+"</td>");
 
     $("#trainTable").append(newRow);
 
